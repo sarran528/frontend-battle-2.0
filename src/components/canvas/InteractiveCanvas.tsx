@@ -1,13 +1,32 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
+import { Canvas, ThreeEvent, useThree } from '@react-three/fiber'; // Import useThree
+import { OrbitControls, Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import InteractiveCube from './SceneObjects';
-import { useMouseParallax } from '../../hooks/useMouseParallax';
+import SceneObjects from './SceneObjects';
+
+// New component to get the true mouse position
+const MouseTracker: React.FC<{
+  setMouse: React.Dispatch<React.SetStateAction<{ x: number; y: number } | null>>;
+}> = ({ setMouse }) => {
+  const { mouse } = useThree();
+
+  // Use useFrame to continuously update the mouse position in 3D world space
+  // based on the camera's projection of the 2D mouse coordinates.
+  // This is better for a "magnetic" effect.
+  useThree((state) => {
+    // state.mouse.x and state.mouse.y are the normalized device coordinates (-1 to 1)
+    // We'll pass these directly to our objects for repulsion, as they represent
+    // the mouse's relative position on the screen.
+    setMouse({ x: state.mouse.x, y: state.mouse.y });
+  });
+
+  return null; // This component doesn't render anything visually
+};
 
 const InteractiveCanvas: React.FC = () => {
   const [mounted, setMounted] = useState(false);
-  const mousePosition = useMouseParallax(0.5);
+  // Changed initial state to null, as the MouseTracker will set it once mounted
+  const [mouse, setMouse] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -30,18 +49,23 @@ const InteractiveCanvas: React.FC = () => {
       viewport={{ once: true }}
     >
       <Canvas>
-        <PerspectiveCamera makeDefault position={[0, 0, 6]} />
         <Suspense fallback={null}>
           <Environment preset="city" />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <InteractiveCube mousePosition={mousePosition} />
+          <ambientLight intensity={0.7} />
+          <directionalLight position={[5, 5, 5]} intensity={1.2} />
+
+          {/* MouseTracker component to get continuous mouse position updates */}
+          <MouseTracker setMouse={setMouse} />
+
+          {/* Pass the mouse state to SceneObjects */}
+          <SceneObjects mouse={mouse} />
+
           <OrbitControls
             enableZoom={false}
             enablePan={false}
             maxPolarAngle={Math.PI / 2}
             minPolarAngle={Math.PI / 2}
-            autoRotate
+            autoRotate={!mouse} // Disable auto-rotation when interacting
             autoRotateSpeed={1}
           />
         </Suspense>
