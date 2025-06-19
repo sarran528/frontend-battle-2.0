@@ -8,26 +8,61 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  pointer-events: auto;
+}
+
+.loaderContainer.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .light {
-  background-color: white;
-}
-
-.dark {
-  background-color: black;
+  background-color: #ffffff;
 }
 
 .rectangle {
-  width: 100px;
-  height: 40px;
-  border: 2px solid currentColor;
+  width: 200px;  /* Changed from 100px */
+  height: 50px;  /* Changed from 100px */
+  border: 2px solid #000000;
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff;
 }
 
-.light .rectangle {
-  border-color: black;
+.filler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #000000;
+  animation: fillRectangle 1.5s ease-in-out infinite;
+}
+
+.dark {
+  background-color: #000000;
 }
 
 .dark .rectangle {
-  border-color: white;
+  border-color: #ffffff;
+  background-color: #000000;
+}
+
+.dark .filler {
+  background-color: #ffffff;
+}
+
+@keyframes fillRectangle {
+  0% {
+    width: 0%;
+  }
+  80% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
 }

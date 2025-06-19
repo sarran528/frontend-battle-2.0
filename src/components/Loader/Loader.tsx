@@ -26,7 +26,9 @@ export const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
-          />
+          >
+            <div className={styles.filler}></div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
