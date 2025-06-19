@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { Loader } from './components/Loader/Loader';
+import styles from './App.module.css';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/sections/Hero';
 import InteractiveCanvas from './components/canvas/InteractiveCanvas';
 import Cards from './components/sections/Cards';
 import Contact from './components/sections/Contact';
-import Loader from './components/ui/Loader';
 import ScrollText from './components/ui/ScrollText';
 import BackToTop from './components/ui/BackToTop';
 import './styles/global.css';
@@ -29,11 +30,11 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="relative">
-        <Loader isLoading={isLoading} onComplete={handleLoaderComplete} />
+      <div className={styles.app}>
+        <Loader isLoading={isLoading} />
         
-        {showContent && (
-          <>
+        {!isLoading && (
+          <div>
             <Navbar />
             <ScrollText />
             <main>
@@ -57,7 +58,7 @@ function App() {
               <Contact />
             </main>
             <BackToTop />
-          </>
+          </div>
         )}
       </div>
     </ThemeProvider>

@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from "react";
 import { useFrame, ThreeEvent } from "@react-three/fiber";
-import { DragControls } from 'three/examples/jsm/controls/DragControls';
+import { DragControls } from 'three-stdlib';
 import { useThree } from "@react-three/fiber";
 import { Group, Vector3 } from "three";
 
