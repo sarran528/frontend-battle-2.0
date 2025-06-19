@@ -2,24 +2,18 @@ import React, { useState } from 'react';
 import SectionTitle from '../common/SectionTitle';
 import Button from '../common/Button';
 
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
-
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    type: 'success' | 'error' | null;
-    message: string;
-  }>({ type: null, message: '' });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log('Form submitted:', formData);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -28,40 +22,88 @@ const Contact: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus({ type: null, message: '' });
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // Reset form
-      setFormData({ name: '', email: '', message: '' });
-      setSubmitStatus({
-        type: 'success',
-        message: 'Thank you for your message! We will get back to you soon.',
-      });
-    } catch (error) {
-      setSubmitStatus({
-        type: 'error',
-        message: 'Something went wrong. Please try again later.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <section id="contact" className="py-20 bg-white dark:bg-gray-800">
+    <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           title="Get in Touch"
           subtitle="Have a question or want to work together?"
         />
 
-        <div className="mt-12 max-w-lg mx-auto">
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Information */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Contact Information
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Fill out the form or contact us directly using the information below.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                    Email
+                  </h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    contact@example.com
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                    Location
+                  </h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    123 Web Dev Street, Digital City, 12345
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
@@ -74,9 +116,9 @@ const Contact: React.FC = () => {
                 type="text"
                 id="name"
                 name="name"
-                required
                 value={formData.name}
                 onChange={handleChange}
+                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
             </div>
@@ -92,9 +134,9 @@ const Contact: React.FC = () => {
                 type="email"
                 id="email"
                 name="email"
-                required
                 value={formData.email}
                 onChange={handleChange}
+                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
             </div>
@@ -109,10 +151,10 @@ const Contact: React.FC = () => {
               <textarea
                 id="message"
                 name="message"
-                rows={4}
-                required
                 value={formData.message}
                 onChange={handleChange}
+                required
+                rows={4}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
             </div>
@@ -121,24 +163,11 @@ const Contact: React.FC = () => {
               <Button
                 type="submit"
                 variant="primary"
-                className="w-full"
-                disabled={isSubmitting}
+                className="w-full justify-center"
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                Send Message
               </Button>
             </div>
-
-            {submitStatus.type && (
-              <div
-                className={`mt-4 p-4 rounded-md ${
-                  submitStatus.type === 'success'
-                    ? 'bg-green-50 text-green-800 dark:bg-green-900 dark:text-green-100'
-                    : 'bg-red-50 text-red-800 dark:bg-red-900 dark:text-red-100'
-                }`}
-              >
-                {submitStatus.message}
-              </div>
-            )}
           </form>
         </div>
       </div>
