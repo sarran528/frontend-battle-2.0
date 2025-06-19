@@ -25,6 +25,7 @@ function App() {
       <Footer />
       <BackToTop />
       <Loader />
+      <div className="bg-red-500 text-white p-10">Tailwind Test</div>
     </div>
   );
 }
